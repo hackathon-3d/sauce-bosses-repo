@@ -234,6 +234,9 @@ public class HomeFragment extends Fragment {
                 mPrescAdapter.notifyDataSetChanged();
                 hideEmptyText();
 
+                // Schedule alarms
+                prescript.generateReminderEvents(getActivity());
+
                 mSlideLayer.closeLayer(true);
             }
         });
@@ -254,12 +257,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onOpened() {
-
+                mList.setEnabled(false);
             }
 
             @Override
             public void onClosed() {
-
+                mList.setEnabled(true);
             }
         });
 
@@ -268,6 +271,12 @@ public class HomeFragment extends Fragment {
    @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override

@@ -15,7 +15,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_main"
         android:label="@string/app_name"
         android:theme="@style/Theme.PillAlarm"
             >
@@ -23,6 +23,7 @@
             android:name="com.r0adkll.sparc.pillalarm.PillAlarm"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateAlwaysHidden|adjustUnspecified"
+            android:screenOrientation="portrait"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

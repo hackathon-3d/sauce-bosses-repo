@@ -14,6 +14,7 @@ public class PillAlarm extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pillalarm);
+        getActionBar().setIcon(R.drawable.ic_launcher);
 
         // Load saved prescriptions
         UserSession.getSession().loadPrescriptions(this);
