@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="/Users/r0adkll/Documents/Projects/PillAlarmProject/PillAlarm/src/main/assets" />
+        <source path="/Users/r0adkll/Documents/Projects/sauce-bosses-repo/PillAlarmProject/PillAlarm/src/main/assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="/Users/r0adkll/Documents/Projects/PillAlarmProject/PillAlarm/src/debug/assets" />
+        <source path="/Users/r0adkll/Documents/Projects/sauce-bosses-repo/PillAlarmProject/PillAlarm/src/debug/assets" />
     </dataSet>
 
 </merger>
