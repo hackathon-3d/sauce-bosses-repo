@@ -53,7 +53,7 @@ public class DrugInfoFragment extends Fragment {
 
             title.setText(data.getName() + " - " + data.getDose() + " mg");
             quantity.setText(data.getQuantity() + " mg");
-            startdate.setText(android.text.format.DateFormat.format("mm dd, yyyy", data.getStartDate()));
+            startdate.setText(android.text.format.DateFormat.format("M dd, yyyy", data.getStartDate()));
 
             String schedString = "";
             for(Schedule sched: data.getScheduling()){

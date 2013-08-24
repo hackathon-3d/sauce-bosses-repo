@@ -1,5 +1,7 @@
 package com.r0adkll.sparc.pillalarm.server.model;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +46,13 @@ public class Prescription implements Serializable{
     public Drug getDrugInfo(){ return info; }
     public void setDrugInfo(Drug drug){
         info = drug;
+    }
+
+    public void generateReminderEvents(Context ctx){
+
+        // Based on prescription info, schedule notification timers
+
+
     }
 
 

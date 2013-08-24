@@ -16,7 +16,7 @@ public class Drug implements Serializable {
 
     public Drug(JSONObject json){
         name = json.optString("name");
-        warning = json.optString("warning");
+        warning = json.optString("warnings");
         side_effects = json.optString("side_effects");
         precautions = json.optString("precautions");
     }

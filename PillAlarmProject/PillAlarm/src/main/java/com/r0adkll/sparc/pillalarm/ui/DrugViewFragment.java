@@ -153,7 +153,7 @@ public class DrugViewFragment extends Fragment {
                 case 0:
                     return "INFO";
                 case 1:
-                    return "WARNING";
+                    return "WARNINGS";
                 case 2:
                     return "SIDE EFFECTS";
                 case 3:

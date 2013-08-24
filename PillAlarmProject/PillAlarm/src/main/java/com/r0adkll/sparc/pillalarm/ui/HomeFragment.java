@@ -227,6 +227,8 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+                // Generate reminder events
+
                 mPrescriptions.add(prescript);
                 UserSession.getSession().savePrescriptions(getActivity());
                 mPrescAdapter.notifyDataSetChanged();
@@ -337,28 +339,42 @@ public class HomeFragment extends Fragment {
 
                 if(sched.isAddItem){
 
-                    // Show the new Sched dialog
-                    AddNewScheduleDialog diag = AddNewScheduleDialog.createInstance();
-                    diag.setAddActionListener(new AddNewScheduleDialog.OnAddActionListener() {
-                        @Override
-                        public void onScheduleOk(Schedule newSched) {
-                            // Remove the add item
-                            //mSchedules.remove(sched);
+                    // Get quantity
+                    int quant = -1;
+                    try{
+                        quant = Integer.valueOf(mEtQuantity.getText().toString());
+                    } catch (NumberFormatException e){
 
-                            // add to list
-                            mSchedules.add(mSchedules.size()-1, newSched);
+                    }
 
-                            // notify list
-                            mAdapter.notifyDataSetChanged();
+                    if(quant != -1){
 
-                        }
+                        // Show the new Sched dialog
+                        AddNewScheduleDialog diag = AddNewScheduleDialog.createInstance(quant);
+                        diag.setAddActionListener(new AddNewScheduleDialog.OnAddActionListener() {
+                            @Override
+                            public void onScheduleOk(Schedule newSched) {
+                                // Remove the add item
+                                //mSchedules.remove(sched);
 
-                        @Override
-                        public void onCancelClick() {
-                            // DO NOTHIZNANS
-                        }
-                    });
-                    diag.show(getFragmentManager(), "ADD_SCHEDULE");
+                                // add to list
+                                mSchedules.add(mSchedules.size()-1, newSched);
+
+                                // notify list
+                                mAdapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onCancelClick() {
+                                // DO NOTHIZNANS
+                            }
+                        });
+                        diag.show(getFragmentManager(), "ADD_SCHEDULE");
+
+                    }else{
+                        DialogFactory.createAlertDialog(getActivity(), "Please enter a quantity first.", "Error");
+                    }
 
                 }
 

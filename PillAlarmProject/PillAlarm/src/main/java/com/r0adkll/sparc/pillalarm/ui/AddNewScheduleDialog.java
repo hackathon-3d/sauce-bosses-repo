@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -27,8 +29,10 @@ public class AddNewScheduleDialog extends DialogFragment {
      * Create a new instance of this dialog fragment
      * @return      shits weak.
      */
-    public static AddNewScheduleDialog createInstance(){
-        return new AddNewScheduleDialog();
+    public static AddNewScheduleDialog createInstance(int quantity){
+        AddNewScheduleDialog frag =  new AddNewScheduleDialog();
+        frag.quantity = quantity;
+        return frag;
     }
 
     /*************************************************
@@ -37,6 +41,10 @@ public class AddNewScheduleDialog extends DialogFragment {
      *
      */
 
+    private int quantity;
+    private int amt = -1;
+    private int freq = -1;
+    private int dur;
     private EditText mAmt, mFreq, mDur;
     private OnAddActionListener listener;
     private InputMethodManager imm;
@@ -60,6 +68,51 @@ public class AddNewScheduleDialog extends DialogFragment {
         mAmt = (EditText) layout.findViewById(R.id.field_amount);
         mFreq = (EditText) layout.findViewById(R.id.field_frequency);
         mDur = (EditText) layout.findViewById(R.id.field_duration);
+
+        // add text watchers
+        mAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                try{
+                    amt = Integer.valueOf(mAmt.getText().toString());
+                    adjustDuration();
+                } catch(NumberFormatException e){
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mFreq.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                try{
+                    freq = Integer.valueOf(mFreq.getText().toString());
+                    adjustDuration();
+                } catch(NumberFormatException e){
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         Dialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(layout)
@@ -105,6 +158,19 @@ public class AddNewScheduleDialog extends DialogFragment {
             }
         });
         return dialog;
+    }
+
+    public void adjustDuration(){
+        if(amt != -1 && freq != -1){
+            // Compute duration in days
+            float rate = (24f / (float)freq);
+            dur = (int) rate * amt;
+
+            // Update text view
+            mDur.setText(dur + "");
+        }
+
+
     }
 
     public void setAddActionListener(OnAddActionListener listener){
