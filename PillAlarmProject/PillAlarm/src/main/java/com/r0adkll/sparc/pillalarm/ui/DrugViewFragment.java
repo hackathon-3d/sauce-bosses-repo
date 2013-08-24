@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.r0adkll.sparc.pillalarm.R;
-import com.r0adkll.sparc.pillalarm.server.UserSession;
 import com.r0adkll.sparc.pillalarm.server.model.Prescription;
 
 import java.util.ArrayList;
@@ -65,6 +64,7 @@ public class DrugViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -81,15 +81,20 @@ public class DrugViewFragment extends Fragment {
         }
 
         mPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        mPager.setOffscreenPageLimit(4);
         mTitleStrip = (PagerTitleStrip) getActivity().findViewById(R.id.tabs);
 
         // Create list of fragemnts to display
         List<Fragment> frags = new ArrayList<Fragment>();
-        frags.add(new Fragment());
-        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 0));
-        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 1));
-        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 2));
+        frags.add(DrugInfoFragment.createInstance(mPrescription));
+        frags.add(DrugWarningFragment.createInstance(mPrescription.getDrugInfo()));
+        frags.add(DrugSideFragment.createInstance(mPrescription.getDrugInfo()));
+        frags.add(DrugPrecautionFragment.createInstance(mPrescription.getDrugInfo()));
 
+        // Setup fragment pager adapter
+
+        FragPagerAdapter adapter = new FragPagerAdapter(getChildFragmentManager(), frags);
+        mPager.setAdapter(adapter);
 
 
     }
@@ -123,7 +128,7 @@ public class DrugViewFragment extends Fragment {
     /**
      * Fragment pager adapter
      */
-    public static class FragPagerAdapter extends FragmentPagerAdapter {
+    public class FragPagerAdapter extends FragmentPagerAdapter {
 
         List<Fragment> frags;
 

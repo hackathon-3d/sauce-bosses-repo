@@ -14,12 +14,11 @@ import com.r0adkll.sparc.pillalarm.server.model.Drug;
 /**
  * Created by r0adkll on 8/24/13.
  */
-public class DrugConditionFragment extends Fragment {
+public class DrugSideFragment extends Fragment {
 
-    public static DrugConditionFragment createInstance(Drug drug, int type){
-        DrugConditionFragment frag = new DrugConditionFragment();
+    public static DrugSideFragment createInstance(Drug drug){
+        DrugSideFragment frag = new DrugSideFragment();
         frag.data = drug;
-        frag.type = type;
         return frag;
     }
 
@@ -29,7 +28,6 @@ public class DrugConditionFragment extends Fragment {
 
 
     private Drug data;
-    private int type = -1;
     private TextView content;
 
     @Override
@@ -39,28 +37,14 @@ public class DrugConditionFragment extends Fragment {
 
         if(savedInstanceState != null){
             data = (Drug) savedInstanceState.getSerializable("DATA");
-            type = savedInstanceState.getInt("TYPE", -1);
         }
 
-        if(type == -1)
-
-        content = (TextView) getActivity().findViewById(R.id.drug_condition_text);
+        content = (TextView) getActivity().findViewById(R.id.drug_sideeffects_text);
 
         if(data != null){
 
-            switch (type){
-                case WARNING:
-                    content.setText(data.warning);
-                    break;
-                case SIDEEFFECTS:
-                    content.setText(data.side_effects);
-                    break;
-                case PRECAUTIONS:
-                    content.setText(data.precautions);
-                    break;
-                default:
-                    content.setText("We're sorry, but content for this drug is not available yet.");
-            }
+            content.setText(data.side_effects);
+
 
         }else{
             content.setText("We're sorry, but content for this drug is not available yet.");
@@ -70,7 +54,7 @@ public class DrugConditionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.layout_drug_condition, container, false);
+        return inflater.inflate(R.layout.layout_drug_sideeffects, container, false);
     }
 
     @Override
@@ -86,7 +70,6 @@ public class DrugConditionFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("DATA", data);
-        outState.putInt("TYPE", type);
         super.onSaveInstanceState(outState);
     }
 }

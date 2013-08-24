@@ -7,7 +7,7 @@
 
         >
 
-    <TextView android:id="@+id/drug_condition_text"
+    <TextView android:id="@+id/drug_sideeffects_text"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:padding="32dp"

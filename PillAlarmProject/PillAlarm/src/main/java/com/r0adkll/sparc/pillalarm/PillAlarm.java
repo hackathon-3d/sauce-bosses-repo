@@ -24,7 +24,7 @@ public class PillAlarm extends FragmentActivity {
 
             // Show the homefragment
             HomeFragment home = HomeFragment.createInstance();
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, home, "HOME")
                     .commit();
 
