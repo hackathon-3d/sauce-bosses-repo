@@ -14,6 +14,8 @@
         android:divider="@null"
         android:dividerHeight="8dp"
 
+        android:paddingTop="48dp"
+
         tools:listitem="@layout/layout_prescription_item"/>
 
     <TextView
@@ -21,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
+
+        android:paddingTop="56dp"
 
         android:text="@string/no_prescription_text"
         android:textSize="18sp"

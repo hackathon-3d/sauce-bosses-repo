@@ -9,12 +9,23 @@
               android:padding="32dp"
         >
 
+
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:text="New Prescription"
+        android:textSize="28sp"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <EditText
+        android:id="@+id/tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="Tag"
         android:textSize="28sp"
         android:fontFamily="sans-serif-light"
         />

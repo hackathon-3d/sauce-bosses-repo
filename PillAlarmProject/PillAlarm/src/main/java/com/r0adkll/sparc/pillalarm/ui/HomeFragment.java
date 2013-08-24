@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.r0adkll.deadskunk.utils.DialogFactory;
 import com.r0adkll.deadskunk.utils.Utils;
 import com.r0adkll.sparc.pillalarm.R;
+import com.r0adkll.sparc.pillalarm.adapters.PrescriptionListAdapter;
 import com.r0adkll.sparc.pillalarm.adapters.ScheduleListAdapter;
 import com.r0adkll.sparc.pillalarm.server.model.Prescription;
 import com.r0adkll.sparc.pillalarm.server.model.Schedule;
@@ -58,12 +59,13 @@ public class HomeFragment extends Fragment{
     private ListView mList, mScheduleList;
     private TextView mNoItemsText;
 
-    private EditText mEtName, mEtDose, mEtQuantity, mEtDate;
+    private EditText mEtName, mEtDose, mEtQuantity, mEtDate, mEtTag;
     private Button mAdd;
 
     private List<Prescription> mPrescriptions = new ArrayList<Prescription>();
     private List<Schedule> mSchedules = new ArrayList<Schedule>();
     private ScheduleListAdapter mAdapter;
+    private PrescriptionListAdapter mPrescAdapter;
 
     /*******************************************
      *
@@ -86,6 +88,8 @@ public class HomeFragment extends Fragment{
         mList = (ListView) getActivity().findViewById(R.id.prescription_list);
         mNoItemsText = (TextView) getActivity().findViewById(R.id.no_prescription_message);
         mSlideLayer = (SlidingLayer) getActivity().findViewById(R.id.slide_layer);
+        mPrescAdapter = new PrescriptionListAdapter(getActivity(), R.layout.layout_prescription_item, mPrescriptions);
+
 
         View layout = getActivity().getLayoutInflater().inflate(R.layout.layout_prescription_form, null, false);
         mScheduleList = (ListView) layout.findViewById(R.id.scheduling_list);
@@ -93,10 +97,13 @@ public class HomeFragment extends Fragment{
         mEtDose = (EditText) layout.findViewById(R.id.et_dose);
         mEtQuantity = (EditText) layout.findViewById(R.id.et_quantity);
         mEtDate = (EditText) layout.findViewById(R.id.et_startdate);
+        mEtTag = (EditText) layout.findViewById(R.id.tag);
+
         mAdd = (Button) layout.findViewById(R.id.submit);
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String tag = mEtTag.getText().toString();
                 String name = mEtName.getText().toString();
                 String dose = mEtDose.getText().toString();
 
@@ -124,8 +131,10 @@ public class HomeFragment extends Fragment{
                 }
 
                 // Create Perscription object
-                Prescription prescript = new Prescription(name, dose, quantity, new Date(), scheds);
+                Prescription prescript = new Prescription(tag, name, dose, quantity, new Date(), scheds);
                 mPrescriptions.add(prescript);
+                mPrescAdapter.notifyDataSetChanged();
+                hideEmptyText();
 
                 mSlideLayer.closeLayer(true);
             }
@@ -133,6 +142,29 @@ public class HomeFragment extends Fragment{
 
         mSlideLayer.addView(layout);
         mSlideLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
+        mSlideLayer.setOnInteractListener(new SlidingLayer.OnInteractListener() {
+            @Override
+            public void onOpen() {
+                getActivity().getActionBar().hide();
+
+            }
+
+            @Override
+            public void onClose() {
+                getActivity().getActionBar().show();
+
+            }
+
+            @Override
+            public void onOpened() {
+
+            }
+
+            @Override
+            public void onClosed() {
+
+            }
+        });
 
         // Attempt to load saved prescription information
         // TODO - this until data loading

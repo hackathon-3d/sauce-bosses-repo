@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Prescription {
 
+    private String tag;
     private String name;
     private String dose;
     private int quantity;
@@ -22,7 +23,8 @@ public class Prescription {
      * @param quantity
      * @param startDate
      */
-    public Prescription(String name, String dose, int quantity, Date startDate, List<Schedule> scheduling){
+    public Prescription(String tag, String name, String dose, int quantity, Date startDate, List<Schedule> scheduling){
+        this.tag = tag;
         this.name = name;
         this.dose = dose;
         this.quantity = quantity;
@@ -30,6 +32,7 @@ public class Prescription {
         this.scheduling = scheduling;
     }
 
+    public String getTag(){ return tag; }
     public String getName(){ return name; }
     public String getDose(){ return dose; }
     public int getQuantity() { return quantity; }
