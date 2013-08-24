@@ -15,12 +15,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.r0adkll.deadskunk.utils.DialogFactory;
+import com.r0adkll.deadskunk.utils.Utils;
 import com.r0adkll.sparc.pillalarm.R;
 import com.r0adkll.sparc.pillalarm.adapters.ScheduleListAdapter;
+import com.r0adkll.sparc.pillalarm.server.model.Prescription;
 import com.r0adkll.sparc.pillalarm.server.model.Schedule;
 import com.slidinglayer.SlidingLayer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,9 +58,10 @@ public class HomeFragment extends Fragment{
     private ListView mList, mScheduleList;
     private TextView mNoItemsText;
 
-    private EditText mEtName, mEtDose, mEtQuantity;
+    private EditText mEtName, mEtDose, mEtQuantity, mEtDate;
     private Button mAdd;
 
+    private List<Prescription> mPrescriptions = new ArrayList<Prescription>();
     private List<Schedule> mSchedules = new ArrayList<Schedule>();
     private ScheduleListAdapter mAdapter;
 
@@ -83,12 +88,53 @@ public class HomeFragment extends Fragment{
         mSlideLayer = (SlidingLayer) getActivity().findViewById(R.id.slide_layer);
 
         View layout = getActivity().getLayoutInflater().inflate(R.layout.layout_prescription_form, null, false);
+        mScheduleList = (ListView) layout.findViewById(R.id.scheduling_list);
+        mEtName = (EditText) layout.findViewById(R.id.et_name);
+        mEtDose = (EditText) layout.findViewById(R.id.et_dose);
+        mEtQuantity = (EditText) layout.findViewById(R.id.et_quantity);
+        mEtDate = (EditText) layout.findViewById(R.id.et_startdate);
+        mAdd = (Button) layout.findViewById(R.id.submit);
+        mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = mEtName.getText().toString();
+                String dose = mEtDose.getText().toString();
+
+                int quantity = -1;
+                try{
+                    quantity = Integer.valueOf(mEtQuantity.getText().toString());
+                } catch (NumberFormatException e){}
+
+                List<Schedule> scheds = new ArrayList<Schedule>(mSchedules);
+                scheds.remove(mSchedules.size()-1);
+
+                // Verify Creation
+                if(name.isEmpty()){
+                    DialogFactory.createAlertDialog(getActivity(), "Please enter a drug name.", "Error");
+                    return;
+                }else if(dose.isEmpty()){
+                    DialogFactory.createAlertDialog(getActivity(), "Please enter a drug dose.", "Error");
+                    return;
+                }else if(quantity == -1){
+                    DialogFactory.createAlertDialog(getActivity(), "Please enter a valid quantity.", "Error");
+                    return;
+                }else if(scheds.isEmpty()){
+                    DialogFactory.createAlertDialog(getActivity(), "Please enter a drug schedule.", "Error");
+                    return;
+                }
+
+                // Create Perscription object
+                Prescription prescript = new Prescription(name, dose, quantity, new Date(), scheds);
+                mPrescriptions.add(prescript);
+
+                mSlideLayer.closeLayer(true);
+            }
+        });
+
         mSlideLayer.addView(layout);
         mSlideLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
 
-
         // Attempt to load saved prescription information
-
         // TODO - this until data loading
         showEmptyText();
     }
@@ -144,13 +190,21 @@ public class HomeFragment extends Fragment{
         mSchedules = new ArrayList<Schedule>();
         mSchedules.add(addItem);
 
+        // Re-set views
+        mEtName.getText().clear();
+        mEtQuantity.getText().clear();
+        mEtDose.getText().clear();
+        mEtDate.getText().clear();
+
         // Re-Create adapter
         mAdapter = new ScheduleListAdapter(getActivity(), R.layout.layout_schedule_item, mSchedules);
-        mList.setAdapter(mAdapter);
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mScheduleList.setAdapter(mAdapter);
+        mScheduleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final Schedule sched = (Schedule) mList.getItemAtPosition(i);
+                final Schedule sched = mSchedules.get(i);
+
+                Utils.log(getTag(), "Schedule Click: " + sched.toString());
 
                 if(sched.isAddItem){
 
@@ -160,10 +214,10 @@ public class HomeFragment extends Fragment{
                         @Override
                         public void onScheduleOk(Schedule newSched) {
                             // Remove the add item
-                            mSchedules.remove(sched);
+                            //mSchedules.remove(sched);
 
                             // add to list
-                            mSchedules.add(newSched);
+                            mSchedules.add(mSchedules.size()-1, newSched);
 
                             // notify list
                             mAdapter.notifyDataSetChanged();
@@ -175,6 +229,7 @@ public class HomeFragment extends Fragment{
                             // DO NOTHIZNANS
                         }
                     });
+                    diag.show(getFragmentManager(), "ADD_SCHEDULE");
 
                 }
 

@@ -43,9 +43,13 @@ public class ScheduleListAdapter extends BetterListAdapter<Schedule> {
         Schedule data = getItem(position);
 
         // Bind data
-        svh.icon.setVisibility(View.GONE);
-        svh.title.setText(data.getAmount() + " pills / " + data.getFrequency() + " hours / " + data.getDuration() + " days");
-
+        if(!data.isAddItem){
+            svh.icon.setVisibility(View.GONE);
+            svh.title.setText(data.getAmount() + " pills / " + data.getFrequency() + " hours / " + data.getDuration() + " days");
+        }else{
+            svh.icon.setVisibility(View.VISIBLE);
+            svh.title.setText("Add schedule");
+        }
     }
 
 

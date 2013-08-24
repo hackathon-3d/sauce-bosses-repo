@@ -38,4 +38,8 @@ public class Schedule {
     public int getFrequency(){ return frequency; }
     public int getDuration(){ return duration; }
 
+    @Override
+    public String toString() {
+        return "[" + amount + ", " + frequency + ", " + duration + "][" + isAddItem + "]";
+    }
 }

@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -37,6 +39,7 @@ public class AddNewScheduleDialog extends DialogFragment {
 
     private EditText mAmt, mFreq, mDur;
     private OnAddActionListener listener;
+    private InputMethodManager imm;
 
     /*************************************************
      *
@@ -48,6 +51,7 @@ public class AddNewScheduleDialog extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setStyle(STYLE_NO_TITLE, R.style.Theme_PillAlarm_Dialog);
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -68,6 +72,11 @@ public class AddNewScheduleDialog extends DialogFragment {
 
                         Schedule newSched = new Schedule(amt, freq, dur);
 
+                        // Kill the Keyboard
+                        imm.hideSoftInputFromWindow(mAmt.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(mFreq.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(mDur.getWindowToken(), 0);
+
                         // KILL THIS BITCH AGAIN!!!!!
                         if(listener != null) listener.onScheduleOk(newSched);
 
@@ -78,12 +87,23 @@ public class AddNewScheduleDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Kill this bitch
+                        // Kill the Keyboard
+                        imm.hideSoftInputFromWindow(mAmt.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(mFreq.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(mDur.getWindowToken(), 0);
+
                         dialogInterface.dismiss();
                         if(listener != null) listener.onCancelClick();
                     }
                 })
                 .create();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                imm.showSoftInput(mAmt, 0);
+            }
+        });
         return dialog;
     }
 
