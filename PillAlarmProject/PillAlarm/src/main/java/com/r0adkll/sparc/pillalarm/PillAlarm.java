@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 
+import com.r0adkll.sparc.pillalarm.server.UserSession;
 import com.r0adkll.sparc.pillalarm.ui.HomeFragment;
 
 public class PillAlarm extends Activity {
@@ -13,7 +14,9 @@ public class PillAlarm extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pillalarm);
 
-        // Load initial data for the app
+        // Load saved prescriptions
+        UserSession.getSession().loadPrescriptions(this);
+
 
 
         if(savedInstanceState == null){

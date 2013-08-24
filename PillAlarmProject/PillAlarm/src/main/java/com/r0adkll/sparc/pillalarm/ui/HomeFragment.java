@@ -14,15 +14,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.r0adkll.deadskunk.utils.DialogFactory;
 import com.r0adkll.deadskunk.utils.Utils;
 import com.r0adkll.sparc.pillalarm.R;
 import com.r0adkll.sparc.pillalarm.adapters.PrescriptionListAdapter;
 import com.r0adkll.sparc.pillalarm.adapters.ScheduleListAdapter;
+import com.r0adkll.sparc.pillalarm.server.APIClient;
+import com.r0adkll.sparc.pillalarm.server.PillAlarmResponseHandler;
+import com.r0adkll.sparc.pillalarm.server.UserSession;
+import com.r0adkll.sparc.pillalarm.server.model.Drug;
 import com.r0adkll.sparc.pillalarm.server.model.Prescription;
 import com.r0adkll.sparc.pillalarm.server.model.Schedule;
 import com.slidinglayer.SlidingLayer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,8 +89,20 @@ public class HomeFragment extends Fragment{
     }
 
     @Override
+    public void onDestroy() {
+
+        // Save Prescriptions
+        UserSession.getSession().savePrescriptions(getActivity());
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Get Prescriptions
+        mPrescriptions = UserSession.getSession().getPrescriptions();
 
         // Load Views
         mList = (ListView) getActivity().findViewById(R.id.prescription_list);
@@ -90,6 +110,11 @@ public class HomeFragment extends Fragment{
         mSlideLayer = (SlidingLayer) getActivity().findViewById(R.id.slide_layer);
         mPrescAdapter = new PrescriptionListAdapter(getActivity(), R.layout.layout_prescription_item, mPrescriptions);
         mList.setAdapter(mPrescAdapter);
+        if(!mPrescriptions.isEmpty()){
+            hideEmptyText();
+        }else{
+            showEmptyText();
+        }
 
 
         View layout = getActivity().getLayoutInflater().inflate(R.layout.layout_prescription_form, null, false);
@@ -99,6 +124,8 @@ public class HomeFragment extends Fragment{
         mEtQuantity = (EditText) layout.findViewById(R.id.et_quantity);
         mEtDate = (EditText) layout.findViewById(R.id.et_startdate);
         mEtTag = (EditText) layout.findViewById(R.id.tag);
+
+
 
         mAdd = (Button) layout.findViewById(R.id.submit);
         mAdd.setOnClickListener(new View.OnClickListener() {
@@ -132,8 +159,35 @@ public class HomeFragment extends Fragment{
                 }
 
                 // Create Perscription object
-                Prescription prescript = new Prescription(tag, name, dose, quantity, new Date(), scheds);
+                final Prescription prescript = new Prescription(tag, name, dose, quantity, new Date(), scheds);
+
+                // Make request to get prescription drug info
+                APIClient.getRequest(name.toLowerCase(), null, new PillAlarmResponseHandler(){
+
+                    @Override
+                    public void onRequestSuccess(JSONObject data) {
+
+                        try {
+                            Utils.log(getTag(), "RESPONSE: " + data.toString(2));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        // Create and apply drug info
+                        Drug info = new Drug(data);
+                        prescript.setDrugInfo(info);
+                        if(getActivity() != null)
+                            UserSession.getSession().savePrescriptions(getActivity());
+                    }
+
+                    @Override
+                    public void onRequestFailure(String message) {
+                        Utils.log(getTag(), "ERROR: " + message);
+                    }
+                });
+
                 mPrescriptions.add(prescript);
+                UserSession.getSession().savePrescriptions(getActivity());
                 mPrescAdapter.notifyDataSetChanged();
                 hideEmptyText();
 
@@ -172,9 +226,9 @@ public class HomeFragment extends Fragment{
         showEmptyText();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+   @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override

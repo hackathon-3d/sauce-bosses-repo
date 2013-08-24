@@ -42,9 +42,11 @@ public class UserSession {
      *
      */
 
-    private List<Prescription> mPrescriptions = new ArrayList<Prescription>();
+    private ArrayList<Prescription> mPrescriptions = new ArrayList<Prescription>();
 
+    public UserSession(){
 
+    }
 
     /*******************************************
      *
@@ -60,6 +62,10 @@ public class UserSession {
         mPrescriptions.remove(pres);
     }
 
+    public ArrayList<Prescription> getPrescriptions(){
+        return mPrescriptions;
+    }
+
     /**
      * Save the user to disk
      * @param ctx   application context
@@ -69,7 +75,7 @@ public class UserSession {
         long pre = System.currentTimeMillis();
         int result = FileUtils.IO_FAIL;
         if(mPrescriptions != null){
-            result = FileUtils.writeObjectToInternal(ctx, "USER_CACHE", mPrescriptions);
+            result = FileUtils.writeObjectToInternal(ctx, "PRESC_CACHE", mPrescriptions);
             long post = System.currentTimeMillis();
             Utils.log(TAG, "[" + result + "] User Data cached in " + (post - pre));
         }
@@ -85,13 +91,14 @@ public class UserSession {
         long pre = System.currentTimeMillis();
         int result = FileUtils.IO_FAIL;
 
-        List<Prescription> cacheUser = (List<Prescription>) FileUtils.readObject(ctx, "USER_CACHE");
+        ArrayList<Prescription> cacheUser = (ArrayList<Prescription>) FileUtils.readObject(ctx, "PRESC_CACHE");
         if(cacheUser != null){
-            mPrescriptions = cacheUser;
+            mPrescriptions = new ArrayList<Prescription>(cacheUser);
             result = FileUtils.IO_SUCCESS;
             long post = System.currentTimeMillis();
             Utils.log(TAG, "[" + result + "] User Data loaded in "  + (post - pre));
         }
         return result;
     }
+
 }

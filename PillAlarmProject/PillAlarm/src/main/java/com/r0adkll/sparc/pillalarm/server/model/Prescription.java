@@ -15,6 +15,7 @@ public class Prescription implements Serializable{
     private int quantity;
     private Date startDate;
     private List<Schedule> scheduling;
+    private Drug info;
 
     /**
      * Constructor
@@ -39,6 +40,11 @@ public class Prescription implements Serializable{
     public int getQuantity() { return quantity; }
     public Date getStartDate(){ return startDate; }
     public List<Schedule> getScheduling(){ return  scheduling; }
+
+    public Drug getDrugInfo(){ return info; }
+    public void setDrugInfo(Drug drug){
+        info = drug;
+    }
 
 
 

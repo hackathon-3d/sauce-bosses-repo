@@ -28,6 +28,7 @@
 
         android:text="@string/no_prescription_text"
         android:textSize="18sp"
+        android:visibility="gone"
         />
 
     <com.slidinglayer.SlidingLayer

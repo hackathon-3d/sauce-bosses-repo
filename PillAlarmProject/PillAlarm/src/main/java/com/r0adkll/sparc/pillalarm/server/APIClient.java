@@ -19,8 +19,7 @@ public class APIClient {
 	 * This is the BASE url for the API server, the endpoints are all
 	 * concatenated to this url.
 	 */
-    public static final String BASE = "https://billow.io/V1/";
-    public static final String API_KEY = "hhdkekkddlem38djm23@#nidkedheis";
+    public static final String BASE = "http://ec2-50-16-178-223.compute-1.amazonaws.com:7070/search/";
 
 
     /***********************************
@@ -63,11 +62,10 @@ public class APIClient {
         // Get Fully Formed URL
         String fullURL = getApiUrl(target);
 
+        Utils.log(TAG, "Get Request: " + fullURL);
+
         // Make get request
         if(params != null){
-            // Inject API Key
-            params.put("apikey", API_KEY);
-
             _client.get(fullURL, params, handler);
         }else
             _client.get(fullURL, handler);
@@ -86,9 +84,6 @@ public class APIClient {
 
         // Make Post request
         if(params != null){
-            // Inject API Key
-            params.put("apikey", API_KEY);
-
             // Post Request
             _client.post(fullURL, params, handler);
         }else
