@@ -1,8 +1,8 @@
 package com.r0adkll.sparc.pillalarm.ui;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by r0adkll on 8/23/13.
  */
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
 
     /*******************************************
      *
@@ -104,12 +104,29 @@ public class HomeFragment extends Fragment{
         // Get Prescriptions
         mPrescriptions = UserSession.getSession().getPrescriptions();
 
+
+
         // Load Views
         mList = (ListView) getActivity().findViewById(R.id.prescription_list);
         mNoItemsText = (TextView) getActivity().findViewById(R.id.no_prescription_message);
         mSlideLayer = (SlidingLayer) getActivity().findViewById(R.id.slide_layer);
         mPrescAdapter = new PrescriptionListAdapter(getActivity(), R.layout.layout_prescription_item, mPrescriptions);
         mList.setAdapter(mPrescAdapter);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Prescription prescription = mPrescriptions.get(i);
+
+                DrugViewFragment dvf = DrugViewFragment.createInstance(prescription);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, dvf, "DRUG_VIEW")
+                        .addToBackStack(null)
+                        .commit();
+
+
+            }
+        });
+
         if(!mPrescriptions.isEmpty()){
             hideEmptyText();
         }else{
@@ -221,9 +238,6 @@ public class HomeFragment extends Fragment{
             }
         });
 
-        // Attempt to load saved prescription information
-        // TODO - this until data loading
-        showEmptyText();
     }
 
    @Override
@@ -341,7 +355,7 @@ public class HomeFragment extends Fragment{
     }
 
     private void hideEmptyText(){
-        mNoItemsText.setVisibility(View.INVISIBLE);
+        mNoItemsText.setVisibility(View.GONE);
     }
 
 

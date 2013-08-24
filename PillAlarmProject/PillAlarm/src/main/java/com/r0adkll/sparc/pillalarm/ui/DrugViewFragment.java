@@ -1,7 +1,11 @@
 package com.r0adkll.sparc.pillalarm.ui;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerTitleStrip;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +15,10 @@ import android.view.ViewGroup;
 
 import com.r0adkll.sparc.pillalarm.R;
 import com.r0adkll.sparc.pillalarm.server.UserSession;
+import com.r0adkll.sparc.pillalarm.server.model.Prescription;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by r0adkll on 8/24/13.
@@ -28,8 +36,9 @@ public class DrugViewFragment extends Fragment {
      * Create a new instance of this fragment
      * @return      the newly created fragment
      */
-    public static DrugViewFragment createInstance(){
+    public static DrugViewFragment createInstance(Prescription presc){
         DrugViewFragment frag = new DrugViewFragment();
+        frag.mPrescription = presc;
         return frag;
     }
 
@@ -39,6 +48,11 @@ public class DrugViewFragment extends Fragment {
      * Variables
      *
      */
+
+    private Prescription mPrescription;
+
+    private ViewPager mPager;
+    private PagerTitleStrip mTitleStrip;
 
     /*******************************************
      *
@@ -62,6 +76,22 @@ public class DrugViewFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if(savedInstanceState != null){
+            mPrescription = (Prescription) savedInstanceState.getSerializable("DATA");
+        }
+
+        mPager = (ViewPager) getActivity().findViewById(R.id.pager);
+        mTitleStrip = (PagerTitleStrip) getActivity().findViewById(R.id.tabs);
+
+        // Create list of fragemnts to display
+        List<Fragment> frags = new ArrayList<Fragment>();
+        frags.add(new Fragment());
+        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 0));
+        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 1));
+        frags.add(DrugConditionFragment.createInstance(mPrescription.getDrugInfo(), 2));
+
+
+
     }
 
     @Override
@@ -71,13 +101,62 @@ public class DrugViewFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_home, menu);
+       // inflater.inflate(R.menu.fragment_home, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        switch (item.getItemId()){
+            case android.R.id.home:
+                getFragmentManager().popBackStack();
+                return true;
+        }
         return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("DATA", mPrescription);
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Fragment pager adapter
+     */
+    public static class FragPagerAdapter extends FragmentPagerAdapter {
+
+        List<Fragment> frags;
+
+        public FragPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+            super(fm);
+            frags = fragments;
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return frags.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch(position){
+                case 0:
+                    return "INFO";
+                case 1:
+                    return "WARNING";
+                case 2:
+                    return "SIDE EFFECTS";
+                case 3:
+                    return "PRECAUTIONS";
+                default:
+                    return "UH OH";
+            }
+        }
     }
 
 }

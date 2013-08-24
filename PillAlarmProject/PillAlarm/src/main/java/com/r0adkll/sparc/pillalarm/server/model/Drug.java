@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by r0adkll on 8/24/13.
  */
-public class Drug implements Serializable{
+public class Drug implements Serializable {
 
     public String name;
     public String warning;

@@ -2,12 +2,13 @@ package com.r0adkll.sparc.pillalarm;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
 import com.r0adkll.sparc.pillalarm.server.UserSession;
 import com.r0adkll.sparc.pillalarm.ui.HomeFragment;
 
-public class PillAlarm extends Activity {
+public class PillAlarm extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
