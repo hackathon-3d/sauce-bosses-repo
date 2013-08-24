@@ -1,12 +1,13 @@
 package com.r0adkll.sparc.pillalarm.server.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by r0adkll on 8/24/13.
  */
-public class Prescription {
+public class Prescription implements Serializable{
 
     private String tag;
     private String name;

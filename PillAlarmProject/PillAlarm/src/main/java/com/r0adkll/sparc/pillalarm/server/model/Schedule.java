@@ -1,9 +1,11 @@
 package com.r0adkll.sparc.pillalarm.server.model;
 
+import java.io.Serializable;
+
 /**
  * Created by r0adkll on 8/24/13.
  */
-public class Schedule {
+public class Schedule implements Serializable{
 
     /********
      * Variables

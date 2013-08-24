@@ -10,7 +10,7 @@
     </style>
 
     <style name="Theme.PillAlarm.ActionBar" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@color/pill_bottle_darkorange</item>
+        <item name="android:background">@drawable/actionbar</item>
         <item name="android:titleTextStyle">@style/Theme.PillAlarm.TitleTextStyle</item>
     </style>
 

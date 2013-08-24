@@ -42,11 +42,11 @@ public class PrescriptionListAdapter extends BetterListAdapter<Prescription> {
         Prescription data = getItem(position);
 
         // Bind data
-        pvh.title.setText(data.getName() + " - " + data.getDose());
+        pvh.title.setText(data.getName() + " - " + data.getDose() + " mg");
         pvh.desc.setText(data.getQuantity() + " pills ");
         if(!data.getTag().isEmpty()){
             pvh.tag.setVisibility(View.VISIBLE);
-            pvh.tag.setText(data.getTag());
+            pvh.tag.setText("#"+data.getTag());
         }else
             pvh.tag.setVisibility(View.GONE);
 

@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="Tag"
-        android:textSize="28sp"
+        android:hint="Tag"
+        android:textSize="18sp"
         android:fontFamily="sans-serif-light"
         />
 
@@ -56,12 +56,21 @@
 
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="mg"
+            android:gravity="bottom"
+            android:textSize="18sp"
+            />
+
         <EditText
             android:id="@+id/et_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Quantity"
+            android:layout_marginLeft="8dp"
             android:textSize="18sp"
             android:layout_marginTop="16dp"
 

@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment{
         mNoItemsText = (TextView) getActivity().findViewById(R.id.no_prescription_message);
         mSlideLayer = (SlidingLayer) getActivity().findViewById(R.id.slide_layer);
         mPrescAdapter = new PrescriptionListAdapter(getActivity(), R.layout.layout_prescription_item, mPrescriptions);
+        mList.setAdapter(mPrescAdapter);
 
 
         View layout = getActivity().getLayoutInflater().inflate(R.layout.layout_prescription_form, null, false);
@@ -103,9 +104,9 @@ public class HomeFragment extends Fragment{
         mAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tag = mEtTag.getText().toString();
-                String name = mEtName.getText().toString();
-                String dose = mEtDose.getText().toString();
+                String tag = mEtTag.getText().toString().trim();
+                String name = mEtName.getText().toString().trim();
+                String dose = mEtDose.getText().toString().trim();
 
                 int quantity = -1;
                 try{
@@ -227,6 +228,7 @@ public class HomeFragment extends Fragment{
         mEtQuantity.getText().clear();
         mEtDose.getText().clear();
         mEtDate.getText().clear();
+        mEtTag.getText().clear();
 
         // Re-Create adapter
         mAdapter = new ScheduleListAdapter(getActivity(), R.layout.layout_schedule_item, mSchedules);
