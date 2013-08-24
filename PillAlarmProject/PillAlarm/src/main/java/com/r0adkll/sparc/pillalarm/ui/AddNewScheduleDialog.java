@@ -165,6 +165,7 @@ public class AddNewScheduleDialog extends DialogFragment {
             // Compute duration in days
             float rate = (24f / (float)freq);
             int ppd = (int) rate * amt;
+            if(ppd == 0) ppd = 1;
             dur = (quantity / ppd);
 
             // Update text view

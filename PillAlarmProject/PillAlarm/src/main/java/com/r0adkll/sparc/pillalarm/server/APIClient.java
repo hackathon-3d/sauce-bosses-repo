@@ -1,9 +1,15 @@
 package com.r0adkll.sparc.pillalarm.server;
 
+import android.net.Uri;
+
 import com.r0adkll.deadskunk.network.AsyncHttpClient;
 import com.r0adkll.deadskunk.network.JsonHttpResponseHandler;
 import com.r0adkll.deadskunk.network.RequestParams;
 import com.r0adkll.deadskunk.utils.Utils;
+
+import org.json.JSONObject;
+
+import java.net.URI;
 
 /**
  * Created by r0adkll on 8/24/13.
@@ -63,6 +69,15 @@ public class APIClient {
         String fullURL = getApiUrl(target);
 
         Utils.log(TAG, "Get Request: " + fullURL);
+
+        // Pre-emptively cache URI Parsing
+        try{
+            URI.create(fullURL);
+        } catch(IllegalArgumentException e){
+            e.printStackTrace();
+            handler.onFailure(e, new JSONObject());
+            return;
+        }
 
         // Make get request
         if(params != null){

@@ -59,7 +59,7 @@ public class PrescriptionListAdapter extends BetterListAdapter<Prescription> {
 
             cal.set(Calendar.HOUR_OF_DAY, 3 + modifier);
 
-            while(cal.before(today) && (cal.getTime().before(data.getStartDate()))){
+            while(cal.before(today) || (cal.getTime().before(data.getStartDate()))){
                 cal.add(Calendar.HOUR_OF_DAY, sched.getFrequency());
 
                 String dayTime = android.text.format.DateFormat.format("hh:mm a", cal.getTime()).toString();
