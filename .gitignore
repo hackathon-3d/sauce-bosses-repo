@@ -27,7 +27,7 @@ proguard/
 .gradle
 /*/local.properties
 /*/out
-/*/*/build
+/**/build
 /*/*/production
 *.iml
 *.iws
