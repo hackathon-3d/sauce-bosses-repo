@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/pill_bottle_orange"
+              android:padding="32dp"
+        >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="New Prescription"
+        android:textSize="28sp"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Drug Name"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_dose"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Dose"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+
+            />
+
+        <EditText
+            android:id="@+id/et_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Quantity"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+
+            />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_startdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Start date"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+
+        />
+
+    <ListView
+        android:id="@+id/scheduling_list"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/smoked_white"
+        android:dividerHeight="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:divider="@color/headerGrey"
+        tools:listitem="@layout/layout_schedule_item"/>
+
+
+
+    <!-- Temp -->
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:layout_marginTop="8dp"
+        />
+
+
+
+</LinearLayout>

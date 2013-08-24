@@ -1,1 +1,1 @@
-include ':PillAlarm', ':libraries:deadSkunk'
+include ':PillAlarm', ':libraries:deadSkunk', ':libraries:SlidingLayer'
