@@ -4,12 +4,14 @@ import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -139,6 +141,71 @@ public class HomeFragment extends Fragment {
         }else{
             showEmptyText();
         }
+
+        // Set List m
+        mList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        mList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            List<Integer> selectedItems = new ArrayList<Integer>();
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                                  long id, boolean checked) {
+
+                if(checked){
+                    if(!selectedItems.contains(position)){
+                        selectedItems.add(position);
+                    }
+                }else{
+                    if(selectedItems.contains(position)){
+                        selectedItems.remove(((Integer)position));
+                    }
+                }
+
+                if(mode != null)
+                    mode.setTitle(selectedItems.size() + " selected");
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                actionMode.getMenuInflater().inflate(R.menu.cab_home, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(final ActionMode actionMode, MenuItem menuItem) {
+                switch(menuItem.getItemId()){
+                    case R.id.menu_delete:
+                        List<Prescription> delList = new ArrayList<Prescription>();
+                        for(int i: selectedItems){
+                            delList.add(mPrescriptions.get(i));
+                        }
+
+                        mPrescriptions.removeAll(delList);
+
+                        if(mPrescriptions.isEmpty()){
+                            showEmptyText();
+                        }else{
+                            hideEmptyText();
+                        }
+
+                        mPrescAdapter.notifyDataSetChanged();
+                        UserSession.getSession().savePrescriptions(getActivity());
+                        actionMode.finish();
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+                selectedItems.clear();
+            }
+        });
 
 
         View layout = getActivity().getLayoutInflater().inflate(R.layout.layout_prescription_form, null, false);
