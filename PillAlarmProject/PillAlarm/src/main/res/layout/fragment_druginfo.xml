@@ -2,7 +2,95 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/holo_lightGrey"
+        >
+
+
+
+    <RelativeLayout
+            android:id="@+id/container1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="16dp"
+        android:background="@color/white"
+        >
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Prescription - 120mg"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-light"
+                />
+
+        <TextView
+                android:id="@+id/quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginTop="8dp"
+
+                android:text="60 pills"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="italic"
+                />
+
+        <TextView
+                android:id="@+id/start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/quantity"
+                android:layout_marginTop="8dp"
+
+                android:text="Started on May 11, 2012"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
+                />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:padding="16dp"
+            android:background="@color/white"
+            android:layout_below="@+id/container1"
+            >
+
+        <TextView
+                android:id="@+id/Scheduling_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Schedule"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-light"
+                />
+
+        <TextView
+                android:id="@+id/Scheduling_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Scheduling_title"
+                android:layout_marginTop="8dp"
+
+                android:text="1 pill every 12 hours for 30 days"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="italic"
+                />
+
+
+    </RelativeLayout>
 
 
 

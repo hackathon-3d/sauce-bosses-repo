@@ -1,5 +1,6 @@
 package com.r0adkll.sparc.pillalarm.ui;
 
+import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -67,8 +70,12 @@ public class HomeFragment extends Fragment {
     private ListView mList, mScheduleList;
     private TextView mNoItemsText;
 
-    private EditText mEtName, mEtDose, mEtQuantity, mEtDate, mEtTag;
+    private EditText mEtName, mEtDose, mEtQuantity, mEtTag;
     private Button mAdd;
+    private View mSetDateView;
+    private TextView mDateTextView;
+
+    private Date chosenDate;
 
     private List<Prescription> mPrescriptions = new ArrayList<Prescription>();
     private List<Schedule> mSchedules = new ArrayList<Schedule>();
@@ -139,9 +146,23 @@ public class HomeFragment extends Fragment {
         mEtName = (EditText) layout.findViewById(R.id.et_name);
         mEtDose = (EditText) layout.findViewById(R.id.et_dose);
         mEtQuantity = (EditText) layout.findViewById(R.id.et_quantity);
-        mEtDate = (EditText) layout.findViewById(R.id.et_startdate);
         mEtTag = (EditText) layout.findViewById(R.id.tag);
-
+        mSetDateView = layout.findViewById(R.id.start_date_container);
+        mDateTextView = (TextView) layout.findViewById(R.id.tv_startdate);
+        mSetDateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Show DatePicker Dialog
+                DatePickerDialog diag = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
+                        chosenDate = new GregorianCalendar(i, i2, i3).getTime();
+                        mDateTextView.setText(android.text.format.DateFormat.format("MM-dd-yyyy", chosenDate));
+                    }
+                }, 2013, 8, 24);
+                diag.show();
+            }
+        });
 
 
         mAdd = (Button) layout.findViewById(R.id.submit);
@@ -173,10 +194,13 @@ public class HomeFragment extends Fragment {
                 }else if(scheds.isEmpty()){
                     DialogFactory.createAlertDialog(getActivity(), "Please enter a drug schedule.", "Error");
                     return;
+                }else if(chosenDate == null){
+                    DialogFactory.createAlertDialog(getActivity(), "Please select the starting date of your prescription", "Error");
+                    return;
                 }
 
                 // Create Perscription object
-                final Prescription prescript = new Prescription(tag, name, dose, quantity, new Date(), scheds);
+                final Prescription prescript = new Prescription(tag, name, dose, quantity, chosenDate, scheds);
 
                 // Make request to get prescription drug info
                 APIClient.getRequest(name.toLowerCase(), null, new PillAlarmResponseHandler(){
@@ -224,7 +248,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClose() {
                 getActivity().getActionBar().show();
-
             }
 
             @Override
@@ -250,27 +273,30 @@ public class HomeFragment extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_add:
                 // Start process to create new prescription item
-                AddNewDialog diag = AddNewDialog.createInstance();
-                diag.show(getFragmentManager(), "ADD_NEW_PRESC");
+//                AddNewDialog diag = AddNewDialog.createInstance();
+//                diag.show(getFragmentManager(), "ADD_NEW_PRESC");
+//
+//                diag.setAddActionListener(new AddNewDialog.OnAddActionListener() {
+//                    @Override
+//                    public void onImageCapture(Bitmap image) {
+//                        // Go Forward
+//                        openNewPrescriptionLayer();
+//                    }
+//
+//                    @Override
+//                    public void onSkipClick() {
+//                        // Go Forward
+//                        openNewPrescriptionLayer();
+//                    }
+//
+//                    @Override
+//                    public void onCancelClick() {
+//                        // Do jack nothing
+//                    }
+//                });
 
-                diag.setAddActionListener(new AddNewDialog.OnAddActionListener() {
-                    @Override
-                    public void onImageCapture(Bitmap image) {
-                        // Go Forward
-                        openNewPrescriptionLayer();
-                    }
 
-                    @Override
-                    public void onSkipClick() {
-                        // Go Forward
-                        openNewPrescriptionLayer();
-                    }
-
-                    @Override
-                    public void onCancelClick() {
-                        // Do jack nothing
-                    }
-                });
+                openNewPrescriptionLayer();
 
                 return true;
         }
@@ -295,8 +321,9 @@ public class HomeFragment extends Fragment {
         mEtName.getText().clear();
         mEtQuantity.getText().clear();
         mEtDose.getText().clear();
-        mEtDate.getText().clear();
         mEtTag.getText().clear();
+        chosenDate = null;
+        mDateTextView.setText("Prescription start date.");
 
         // Re-Create adapter
         mAdapter = new ScheduleListAdapter(getActivity(), R.layout.layout_schedule_item, mSchedules);

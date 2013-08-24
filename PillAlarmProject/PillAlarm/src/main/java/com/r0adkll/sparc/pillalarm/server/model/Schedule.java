@@ -42,6 +42,6 @@ public class Schedule implements Serializable{
 
     @Override
     public String toString() {
-        return "[" + amount + ", " + frequency + ", " + duration + "][" + isAddItem + "]";
+        return amount + " pill for every " + frequency + " hour for " + duration + " days.";
     }
 }

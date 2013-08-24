@@ -42,8 +42,10 @@ public class DrugSideFragment extends Fragment {
         content = (TextView) getActivity().findViewById(R.id.drug_sideeffects_text);
 
         if(data != null){
-
-            content.setText(data.side_effects);
+            if(data.side_effects.isEmpty())
+                content.setText("We're sorry, but content for this drug is not available yet.");
+            else
+                content.setText(data.side_effects);
 
 
         }else{

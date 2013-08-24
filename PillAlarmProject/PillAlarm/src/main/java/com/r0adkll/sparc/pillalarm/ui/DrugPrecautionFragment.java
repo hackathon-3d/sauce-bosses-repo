@@ -42,8 +42,10 @@ public class DrugPrecautionFragment extends Fragment{
         content = (TextView) getActivity().findViewById(R.id.drug_precaution_text);
 
         if(data != null){
-
-            content.setText(data.precautions);
+            if(data.precautions.isEmpty())
+                content.setText("We're sorry, but content for this drug is not available yet.");
+            else
+                content.setText(data.precautions);
 
         }else{
             content.setText("We're sorry, but content for this drug is not available yet.");

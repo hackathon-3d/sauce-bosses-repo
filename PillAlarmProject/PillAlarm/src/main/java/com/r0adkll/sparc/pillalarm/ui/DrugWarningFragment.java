@@ -42,8 +42,10 @@ public class DrugWarningFragment extends Fragment{
         content = (TextView) getActivity().findViewById(R.id.drug_warning_text);
 
         if(data != null){
-
-            content.setText(data.warning);
+            if(data.warning.isEmpty())
+                content.setText("We're sorry, but content for this drug is not available yet.");
+            else
+                content.setText(data.warning);
 
         }else{
             content.setText("We're sorry, but content for this drug is not available yet.");

@@ -4,16 +4,18 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-
+              android:background="@color/holo_lightGrey"
         >
 
     <TextView android:id="@+id/drug_sideeffects_text"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="32dp"
+              android:layout_height="wrap_content"
+              android:layout_margin="16dp"
+              android:padding="16dp"
 
               android:text="Drug Condition"
               android:textSize="18sp"
+              android:background="@color/white"
 
               />
 

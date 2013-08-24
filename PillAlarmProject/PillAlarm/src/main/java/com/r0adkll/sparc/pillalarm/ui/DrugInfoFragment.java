@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.r0adkll.sparc.pillalarm.R;
 import com.r0adkll.sparc.pillalarm.server.model.Drug;
 import com.r0adkll.sparc.pillalarm.server.model.Prescription;
+import com.r0adkll.sparc.pillalarm.server.model.Schedule;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by r0adkll on 8/24/13.
@@ -29,10 +32,17 @@ public class DrugInfoFragment extends Fragment {
 
     private Prescription data;
 
+    private  TextView title, quantity, startdate, schedule;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+
+        title = (TextView) getActivity().findViewById(R.id.title);
+        quantity = (TextView) getActivity().findViewById(R.id.quantity);
+        startdate = (TextView) getActivity().findViewById(R.id.start_date);
+        schedule = (TextView) getActivity().findViewById(R.id.Scheduling_content);
 
         if(savedInstanceState != null){
             data = (Prescription) savedInstanceState.getSerializable("DATA");
@@ -41,8 +51,15 @@ public class DrugInfoFragment extends Fragment {
 
         if(data != null){
 
+            title.setText(data.getName() + " - " + data.getDose() + " mg");
+            quantity.setText(data.getQuantity() + " mg");
+            startdate.setText(android.text.format.DateFormat.format("mm dd, yyyy", data.getStartDate()));
 
-
+            String schedString = "";
+            for(Schedule sched: data.getScheduling()){
+                schedString = schedString.concat(sched.toString() + "\n");
+            }
+            schedule.setText(schedString);
         }
 
     }
