@@ -24,6 +24,13 @@ proguard/
 
 # Intellij project files
 *.iml
-*.ipr
 *.iws
+*.ipr
 .idea/
+.gradle/
+local.properties
+
+*/build/
+
+*~
+*.swp
